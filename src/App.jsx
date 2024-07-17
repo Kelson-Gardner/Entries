@@ -1,33 +1,87 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Button } from '@mui/material'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import VisuallyHiddenInput from './components/VisuallyHiddenInput';
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [winner, setWinner] = useState("")
+  const [entryPool, setEntryPool] = useState([])
+  const [file, setFile] = useState()
+
+  function pickRandomEntry(entries) {
+    const totalEntries = entries.reduce((sum , entry) => sum + parseInt(entry.Entries), 0);
+    let randomIndex = Math.floor(Math.random() * totalEntries);
+    for (const entry of entries) {
+        if (randomIndex < entry.Entries) {
+            return entry.Name;
+        }
+        randomIndex -= entry.Entries;
+    }
+}
+
+  function readFile(event){
+    if(entryPool.length > 0 && event.target.files === undefined){
+      setWinner(pickRandomEntry(entryPool))
+    }
+    else{
+      setFile(event.target.files[0])
+      const tempFile = event.target.files[0];
+      if (tempFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result;
+          setEntryPool(parseCSV(content))
+          const tempEntryPool = parseCSV(content)
+          setWinner(pickRandomEntry(tempEntryPool))
+        };
+        reader.readAsText(tempFile);
+      }
+    }
+  }
+
+  function parseCSV(csv) {
+    const lines = csv.split('\n'); 
+    const entries = [];
+    const headers = ["Name", "Entries"]
+  
+    for (let i = 0; i < lines.length; i++) {
+      const values = lines[i].split(',');
+      if (values.length === headers.length) {
+        const entry = {};
+        for (let j = 0; j < headers.length; j++) {
+          entry[headers[j]] = values[j].trim();
+        }
+        entries.push(entry);
+      }
+    }
+    return entries;
+  }
+
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <h1>Entries</h1>
+      <div className="input-container">
+        <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}>
+          Upload CSV File
+         <VisuallyHiddenInput funct={readFile}/>
+         </Button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {winner !== "" && (
+        <>
+        <p>The Winner is {winner}!!</p>
+        <Button 
+        onClick={readFile}
+        >Generatre New Winner</Button>
+        </>
+      )}
     </>
   )
 }
