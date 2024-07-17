@@ -25,7 +25,6 @@ function App() {
       setWinner(pickRandomEntry(entryPool))
     }
     else{
-      setFile(event.target.files[0])
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
