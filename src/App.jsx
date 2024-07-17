@@ -8,7 +8,6 @@ import VisuallyHiddenInput from './components/VisuallyHiddenInput';
 function App() {
   const [winner, setWinner] = useState("")
   const [entryPool, setEntryPool] = useState([])
-  const [file, setFile] = useState()
 
   function pickRandomEntry(entries) {
     const totalEntries = entries.reduce((sum , entry) => sum + parseInt(entry.Entries), 0);
@@ -27,8 +26,8 @@ function App() {
     }
     else{
       setFile(event.target.files[0])
-      const tempFile = event.target.files[0];
-      if (tempFile) {
+      const file = event.target.files[0];
+      if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
           const content = e.target.result;
@@ -36,7 +35,7 @@ function App() {
           const tempEntryPool = parseCSV(content)
           setWinner(pickRandomEntry(tempEntryPool))
         };
-        reader.readAsText(tempFile);
+        reader.readAsText(file);
       }
     }
   }
