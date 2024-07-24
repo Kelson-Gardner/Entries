@@ -8,6 +8,7 @@ import VisuallyHiddenInput from './components/VisuallyHiddenInput';
 function App() {
   const [winner, setWinner] = useState("")
   const [entryPool, setEntryPool] = useState([])
+  const [error, setError] = useState("")
 
   function pickRandomEntry(entries) {
     const totalEntries = entries.reduce((sum , entry) => sum + parseInt(entry.Entries), 0);
@@ -40,17 +41,24 @@ function App() {
   }
 
   function parseCSV(csv) {
+    setError("")
     const lines = csv.split('\n'); 
     const entries = [];
     const headers = ["Name", "Entries"]
-  
     for (let i = 0; i < lines.length; i++) {
       const values = lines[i].split(',');
       if (values.length === headers.length) {
+        console.log(values.length)
         const entry = {};
         for (let j = 0; j < headers.length; j++) {
           entry[headers[j]] = values[j].trim();
         }
+        
+        if((values[0] || values[1]) && !(values[0] && values[1])){
+          setError("The CSV is not formatted correctly!");
+          break;
+        }
+
         entries.push(entry);
       }
     }
@@ -72,7 +80,12 @@ function App() {
          <VisuallyHiddenInput funct={readFile}/>
          </Button>
       </div>
-      {winner !== "" && (
+      {error && (
+          <>
+          <p>{error}</p>
+          </>
+      )}
+      {winner && (
         <>
         <p>The Winner is {winner}!!</p>
         <Button 
