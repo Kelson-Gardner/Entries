@@ -3,6 +3,8 @@ import './App.css'
 import { Button } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import VisuallyHiddenInput from './components/VisuallyHiddenInput';
+import HelpIcon from '@mui/icons-material/Help';
+import Tooltip from '@mui/material/Tooltip';
 
 
 function App() {
@@ -75,10 +77,14 @@ function App() {
             role={undefined}
             variant="contained"
             tabIndex={-1}
-            startIcon={<CloudUploadIcon />}>
+            startIcon={<CloudUploadIcon />}
+            id="button">
           Upload CSV File
          <VisuallyHiddenInput funct={readFile}/>
          </Button>
+         <Tooltip title="The CSV should be formatted as follows ['name','entries']" arrow>
+         <HelpIcon id="help-icon"></HelpIcon>
+         </Tooltip>
       </div>
       {error && (
           <>
