@@ -5,6 +5,6 @@ import { StaleWhileRevalidate } from 'workbox-strategies';
 precacheAndRoute(self.__WB_MANIFEST || []);
 
 registerRoute(
-  ({ url }) => url.origin === 'http://localhost:4173',
+  ({ url }) => url.origin === 'http://localhost:8080',
   new StaleWhileRevalidate()
 );
