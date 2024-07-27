@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import './App.css'
 import { Button } from '@mui/material'
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import VisuallyHiddenInput from './components/VisuallyHiddenInput';
 import HelpIcon from '@mui/icons-material/Help';
 import Tooltip from '@mui/material/Tooltip';
-import PercentIcon from '@mui/icons-material/Percent';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import CelebrationIcon from '@mui/icons-material/Celebration';
 
 function App() {
   const [winner, setWinner] = useState("");
@@ -107,7 +108,6 @@ function App() {
     return entries;
   }
 
-
   return (
     <>
       <h1>
@@ -118,35 +118,38 @@ function App() {
       </h1>
       <div className="button-container">
         <Button
+            sx={{ minWidth: 350 }}   
             component="label"
             role={undefined}
             variant="contained"
             tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
+            startIcon={<EmojiEventsIcon />}
             className="button">
-          Upload CSV File
+          Get A Winner
          <VisuallyHiddenInput funct={selectWinner}/>
          </Button>
       </div>
       <div className="button-container">
       <Button
+            sx={{ minWidth: 350 }}
             component="label"
             role={undefined}
             variant="contained"
             tabIndex={-1}
-            startIcon={<PercentIcon />}
+            startIcon={<FormatListNumberedIcon />}
             className="button">
-          Get Percentages
+          Get Percentages Of Entries
          <VisuallyHiddenInput funct={getPercentages}/>
          </Button>
       </div>
       <div className="button-container">
       <Button
+            sx={{ minWidth: 350 }}
+            variant="contained"
             component="label"
             role={undefined}
-            variant="contained"
             tabIndex={-1}
-            startIcon={<PercentIcon />}
+            startIcon={<CelebrationIcon />}
             className="button">
           Get Winner With Percentages
          <VisuallyHiddenInput funct={getPercentagesAndWinner}/>
@@ -157,7 +160,7 @@ function App() {
           <p>{error}</p>
           </>
       )}
-      {percentages && winner &&(
+      {percentages && winner && (
         <>
         <p>The Winner is {winner}!!</p>
         <Button 
