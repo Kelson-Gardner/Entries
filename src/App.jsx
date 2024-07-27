@@ -5,15 +5,42 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import VisuallyHiddenInput from './components/VisuallyHiddenInput';
 import HelpIcon from '@mui/icons-material/Help';
 import Tooltip from '@mui/material/Tooltip';
-
+import PercentIcon from '@mui/icons-material/Percent';
 
 function App() {
-  const [winner, setWinner] = useState("")
-  const [entryPool, setEntryPool] = useState([])
-  const [error, setError] = useState("")
+  const [winner, setWinner] = useState("");
+  const [entryPool, setEntryPool] = useState([]);
+  const [error, setError] = useState("");
+  const [percentages, setPercentages] = useState([])
+  
+  function selectWinner(event){
+    readFile(event, pickRandomEntry)
+  }
+  
+  function getPercentages(event){
+    readFile(event, calculatePercentages)
+  }
+
+  function getTotalEntries(entries){
+    return entries.reduce((sum, entry) => sum + parseInt(entry.Entries), 0);
+  }
+
+  function calculatePercentages(entries){
+    setWinner("");
+    const totalEntries = getTotalEntries(entries);
+    let entryPercentages = []
+    for(let entry of entries){
+      let winPercentage = (entry.Entries / totalEntries) * 100;
+      let newEntry = {name: entry.Name, percentage: winPercentage.toFixed(2)}
+      entryPercentages.push(newEntry);
+    }
+    setPercentages(entryPercentages.sort((a, b) => b.percentage - a.percentage));
+    return entryPercentages;
+  }
 
   function pickRandomEntry(entries) {
-    const totalEntries = entries.reduce((sum , entry) => sum + parseInt(entry.Entries), 0);
+    setPercentages([])
+    const totalEntries = getTotalEntries(entries);
     let randomIndex = Math.floor(Math.random() * totalEntries);
     for (const entry of entries) {
         if (randomIndex < entry.Entries) {
@@ -21,11 +48,11 @@ function App() {
         }
         randomIndex -= entry.Entries;
     }
-}
+  }
 
-  function readFile(event){
+  function readFile(event, funct){
     if(entryPool.length > 0 && event.target.files === undefined){
-      setWinner(pickRandomEntry(entryPool))
+      setWinner(pickRandomEntry(entryPool));
     }
     else{
       const file = event.target.files[0];
@@ -33,9 +60,18 @@ function App() {
         const reader = new FileReader();
         reader.onload = (e) => {
           const content = e.target.result;
-          setEntryPool(parseCSV(content))
-          const tempEntryPool = parseCSV(content)
-          setWinner(pickRandomEntry(tempEntryPool))
+
+          setEntryPool(parseCSV(content));
+
+          const tempEntryPool = parseCSV(content);
+          const result = funct(tempEntryPool);
+
+          if(Array.isArray(result)){
+            setPercentages(funct(tempEntryPool));
+          }else{
+            setWinner(funct(tempEntryPool));
+          }
+
         };
         reader.readAsText(file);
       }
@@ -43,22 +79,23 @@ function App() {
   }
 
   function parseCSV(csv) {
-    setError("")
+    setError("");
     const lines = csv.split('\n'); 
     const entries = [];
-    const headers = ["Name", "Entries"]
+    const headers = ["Name", "Entries"];
     for (let i = 0; i < lines.length; i++) {
       const values = lines[i].split(',');
+
       if (values.length === headers.length) {
-        console.log(values.length)
         const entry = {};
+
         for (let j = 0; j < headers.length; j++) {
           entry[headers[j]] = values[j].trim();
         }
         
         if((values[0] || values[1]) && !(values[0] && values[1])){
           setError("The CSV is not formatted correctly!");
-          break;
+          return []
         }
 
         entries.push(entry);
@@ -70,21 +107,35 @@ function App() {
 
   return (
     <>
-      <h1>Entries</h1>
-      <div className="input-container">
+      <h1>
+        Entries
+      <Tooltip title="The CSV should be formatted as follows ['name','entries']" arrow>
+         <HelpIcon id="help-icon"></HelpIcon>
+         </Tooltip>
+      </h1>
+      <div id="button-container">
         <Button
             component="label"
             role={undefined}
             variant="contained"
             tabIndex={-1}
             startIcon={<CloudUploadIcon />}
-            id="button">
+            className="button">
           Upload CSV File
-         <VisuallyHiddenInput funct={readFile}/>
+         <VisuallyHiddenInput funct={selectWinner}/>
          </Button>
-         <Tooltip title="The CSV should be formatted as follows ['name','entries']" arrow>
-         <HelpIcon id="help-icon"></HelpIcon>
-         </Tooltip>
+      </div>
+      <div>
+      <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<PercentIcon />}
+            className="button">
+          Get Percentages
+         <VisuallyHiddenInput funct={getPercentages}/>
+         </Button>
       </div>
       {error && (
           <>
@@ -95,8 +146,16 @@ function App() {
         <>
         <p>The Winner is {winner}!!</p>
         <Button 
-        onClick={readFile}
+        onClick={selectWinner}
         >Generatre New Winner</Button>
+        </>
+      )}
+      {percentages && (
+        <>
+        <ul>{percentages.map((item, index) => (
+            <li key={index}>{item.name}: {item.percentage}%</li>
+        ))}
+        </ul>
         </>
       )}
     </>

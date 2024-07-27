@@ -5,12 +5,16 @@
   text-align: center;
 }
 
-.input-container{
-  display: flex;
-  align-items: center;
-  margin-left: 40px;
+#button-container{
+  margin-bottom: 20px;
 }
 
-#button{
-  margin-right: 10px;
+.button{
+  min-width: 200px;
+  background-color: black;
+}
+
+ul{
+  list-style-type: none;
+  padding: 0;
 }
