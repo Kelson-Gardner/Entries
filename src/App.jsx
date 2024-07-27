@@ -7,6 +7,8 @@ import Tooltip from '@mui/material/Tooltip';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import CelebrationIcon from '@mui/icons-material/Celebration';
+import confetti from 'canvas-confetti';
+
 
 function App() {
   const [winner, setWinner] = useState("");
@@ -16,6 +18,13 @@ function App() {
   
   function selectWinner(event){
     readFile(event, pickRandomEntry);
+    confetti({
+      angle: 90,
+      spread: 360,
+      particleCount: 100,
+      origin: { x: 0.5, y: 0.5 },
+      colors: ['#ff0', '#0f0', '#f00']
+    });
   }
   
   function getPercentages(event){
@@ -25,6 +34,13 @@ function App() {
   function getPercentagesAndWinner(event){
     readFile(event, pickRandomEntry);
     readFile(event, calculatePercentages);
+    confetti({
+  angle: 90,
+  spread: 360,
+  particleCount: 100,
+  origin: { x: 0.5, y: 0.5 },
+  colors: ['#ff0', '#0f0', '#f00']
+});
   }
 
   function getTotalEntries(entries){
