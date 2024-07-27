@@ -5,13 +5,8 @@
   text-align: center;
 }
 
-#button-container{
+.button-container{
   margin-bottom: 20px;
-}
-
-.button{
-  min-width: 200px;
-  background-color: black;
 }
 
 ul{

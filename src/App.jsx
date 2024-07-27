@@ -14,11 +14,16 @@ function App() {
   const [percentages, setPercentages] = useState([])
   
   function selectWinner(event){
-    readFile(event, pickRandomEntry)
+    readFile(event, pickRandomEntry);
   }
   
   function getPercentages(event){
-    readFile(event, calculatePercentages)
+    readFile(event, calculatePercentages);
+  }
+
+  function getPercentagesAndWinner(event){
+    readFile(event, pickRandomEntry);
+    readFile(event, calculatePercentages);
   }
 
   function getTotalEntries(entries){
@@ -26,7 +31,6 @@ function App() {
   }
 
   function calculatePercentages(entries){
-    setWinner("");
     const totalEntries = getTotalEntries(entries);
     let entryPercentages = []
     for(let entry of entries){
@@ -39,7 +43,6 @@ function App() {
   }
 
   function pickRandomEntry(entries) {
-    setPercentages([])
     const totalEntries = getTotalEntries(entries);
     let randomIndex = Math.floor(Math.random() * totalEntries);
     for (const entry of entries) {
@@ -113,7 +116,7 @@ function App() {
          <HelpIcon id="help-icon"></HelpIcon>
          </Tooltip>
       </h1>
-      <div id="button-container">
+      <div className="button-container">
         <Button
             component="label"
             role={undefined}
@@ -125,7 +128,7 @@ function App() {
          <VisuallyHiddenInput funct={selectWinner}/>
          </Button>
       </div>
-      <div>
+      <div className="button-container">
       <Button
             component="label"
             role={undefined}
@@ -137,12 +140,36 @@ function App() {
          <VisuallyHiddenInput funct={getPercentages}/>
          </Button>
       </div>
+      <div className="button-container">
+      <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<PercentIcon />}
+            className="button">
+          Get Winner With Percentages
+         <VisuallyHiddenInput funct={getPercentagesAndWinner}/>
+         </Button>
+      </div>
       {error && (
           <>
           <p>{error}</p>
           </>
       )}
-      {winner && (
+      {percentages && winner &&(
+        <>
+        <p>The Winner is {winner}!!</p>
+        <Button 
+        onClick={selectWinner}
+        >Generatre New Winner</Button>
+        <ul>{percentages.map((item, index) => (
+            <li key={index}>{item.name}: {item.percentage}%</li>
+        ))}
+        </ul>
+        </>
+      )}
+      {winner && !percentages && (
         <>
         <p>The Winner is {winner}!!</p>
         <Button 
@@ -150,7 +177,7 @@ function App() {
         >Generatre New Winner</Button>
         </>
       )}
-      {percentages && (
+      {percentages && !winner && (
         <>
         <ul>{percentages.map((item, index) => (
             <li key={index}>{item.name}: {item.percentage}%</li>
