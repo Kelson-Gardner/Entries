@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import './App.css'
-import { Button } from '@mui/material'
+import { useState } from 'react';
+import './App.css';
+import { Button } from '@mui/material';
 import VisuallyHiddenInput from './components/VisuallyHiddenInput';
 import HelpIcon from '@mui/icons-material/Help';
 import Tooltip from '@mui/material/Tooltip';
@@ -14,7 +14,7 @@ function App() {
   const [winner, setWinner] = useState("");
   const [entryPool, setEntryPool] = useState([]);
   const [error, setError] = useState("");
-  const [percentages, setPercentages] = useState([])
+  const [percentages, setPercentages] = useState([]);
   
   function selectWinner(event){
     readFile(event, pickRandomEntry);
@@ -26,10 +26,7 @@ function App() {
       colors: ['#ff0', '#0f0', '#f00']
     });
   }
-  
-  function getPercentages(event){
-    readFile(event, calculatePercentages);
-  }
+
 
   function getPercentagesAndWinner(event){
     readFile(event, pickRandomEntry);
@@ -49,10 +46,10 @@ function App() {
 
   function calculatePercentages(entries){
     const totalEntries = getTotalEntries(entries);
-    let entryPercentages = []
+    let entryPercentages = [];
     for(let entry of entries){
       let winPercentage = (entry.Entries / totalEntries) * 100;
-      let newEntry = {name: entry.Name, percentage: winPercentage.toFixed(2)}
+      let newEntry = {name: entry.Name, percentage: winPercentage.toFixed(2)};
       entryPercentages.push(newEntry);
     }
     setPercentages(entryPercentages.sort((a, b) => b.percentage - a.percentage));
@@ -128,7 +125,7 @@ function App() {
     <>
       <h1>
         Entries
-      <Tooltip title="The CSV should be formatted as follows ['name','entries']" arrow>
+      <Tooltip title="The CSV should be formatted as follows ['name',' # of entries']" arrow>
          <HelpIcon id="help-icon"></HelpIcon>
          </Tooltip>
       </h1>
@@ -142,32 +139,6 @@ function App() {
             startIcon={<EmojiEventsIcon />}
             className="button">
           Get A Winner
-         <VisuallyHiddenInput funct={selectWinner}/>
-         </Button>
-      </div>
-      <div className="button-container">
-      <Button
-            sx={{ minWidth: 350 }}
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<FormatListNumberedIcon />}
-            className="button">
-          Get Percentages Of Entries
-         <VisuallyHiddenInput funct={getPercentages}/>
-         </Button>
-      </div>
-      <div className="button-container">
-      <Button
-            sx={{ minWidth: 350 }}
-            variant="contained"
-            component="label"
-            role={undefined}
-            tabIndex={-1}
-            startIcon={<CelebrationIcon />}
-            className="button">
-          Get Winner With Percentages
          <VisuallyHiddenInput funct={getPercentagesAndWinner}/>
          </Button>
       </div>
@@ -182,22 +153,6 @@ function App() {
         <Button 
         onClick={selectWinner}
         >Generatre New Winner</Button>
-        <ul>{percentages.map((item, index) => (
-            <li key={index}>{item.name}: {item.percentage}%</li>
-        ))}
-        </ul>
-        </>
-      )}
-      {winner && !percentages && (
-        <>
-        <p>The Winner is {winner}!!</p>
-        <Button 
-        onClick={selectWinner}
-        >Generatre New Winner</Button>
-        </>
-      )}
-      {percentages && !winner && (
-        <>
         <ul>{percentages.map((item, index) => (
             <li key={index}>{item.name}: {item.percentage}%</li>
         ))}
