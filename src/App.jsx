@@ -5,39 +5,22 @@ import VisuallyHiddenInput from './components/VisuallyHiddenInput';
 import HelpIcon from '@mui/icons-material/Help';
 import Tooltip from '@mui/material/Tooltip';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
-import CelebrationIcon from '@mui/icons-material/Celebration';
-import confetti from 'canvas-confetti';
-
 
 function App() {
   const [winner, setWinner] = useState("");
   const [entryPool, setEntryPool] = useState([]);
   const [error, setError] = useState("");
+  const [formatError, setFormatError] = useState("");
   const [percentages, setPercentages] = useState([]);
   
   function selectWinner(event){
     readFile(event, pickRandomEntry);
-    confetti({
-      angle: 90,
-      spread: 360,
-      particleCount: 100,
-      origin: { x: 0.5, y: 0.5 },
-      colors: ['#ff0', '#0f0', '#f00']
-    });
   }
 
 
   function getPercentagesAndWinner(event){
     readFile(event, pickRandomEntry);
     readFile(event, calculatePercentages);
-    confetti({
-  angle: 90,
-  spread: 360,
-  particleCount: 100,
-  origin: { x: 0.5, y: 0.5 },
-  colors: ['#ff0', '#0f0', '#f00']
-});
   }
 
   function getTotalEntries(entries){
@@ -97,6 +80,7 @@ function App() {
 
   function parseCSV(csv) {
     setError("");
+    setFormatError("");
     const lines = csv.split('\n'); 
     const entries = [];
     const headers = ["Name", "Entries"];
@@ -109,8 +93,16 @@ function App() {
         for (let j = 0; j < headers.length; j++) {
           entry[headers[j]] = values[j].trim();
         }
-        
+
+        values[0] = values[0].replace(/\s+/g, '');
+        values[1] = values[1].replace(/\s+/g, '');
+
         if((values[0] || values[1]) && !(values[0] && values[1])){
+          if(!values[0]){
+            setFormatError(`A name is missing in Row ${i + 1}`)
+          } else {
+            setFormatError(`# of entries is missing in Row ${i + 1} for ${values[0]}`)
+          }
           setError("The CSV is not formatted correctly!");
           return []
         }
@@ -125,7 +117,7 @@ function App() {
     <>
       <h1>
         Entries
-      <Tooltip title="The CSV should be formatted as follows ['name',' # of entries']" arrow>
+      <Tooltip title={<span>The CSV should be formatted as follows:<br></br> Column 1: Names, Column 2: # of Entries</span>} arrow>
          <HelpIcon id="help-icon"></HelpIcon>
          </Tooltip>
       </h1>
@@ -144,12 +136,13 @@ function App() {
       </div>
       {error && (
           <>
-          <p>{error}</p>
+          <div style={{color: 'red'}}>{error}</div>
+          <div style={{color: 'red'}}>{formatError}</div>
           </>
       )}
       {percentages && winner && (
         <>
-        <p>The Winner is {winner}!!</p>
+        <h2>The Winner is {winner}!!</h2>
         <Button 
         onClick={selectWinner}
         >Generatre New Winner</Button>
