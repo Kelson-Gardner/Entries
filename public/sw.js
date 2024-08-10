@@ -5,6 +5,6 @@ import { StaleWhileRevalidate } from 'workbox-strategies';
 precacheAndRoute(self.__WB_MANIFEST || []);
 
 registerRoute(
-  ({ url }) => url.origin === 'https://kelson-gardner.github.io/Entries',
+  ({ url }) => url.origin === 'https://kelson-gardner.github.io',
   new StaleWhileRevalidate()
 );
