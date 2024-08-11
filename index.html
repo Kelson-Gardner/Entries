@@ -7,13 +7,25 @@
     <link rel="icon" href="src/assets/favicon.ico" />
     <link rel="apple-touch-icon" href="/src/assets/apple-touch-icon-180x180.png" sizes="180x180" />
     <link rel="mask-icon" href="src/assets/mask-icon.svg" color="#FFFFFF">
+    <link rel="canonical" href="https://kelson-gardner.github.io/Entries/" />
     <meta name="theme-color" content="#ffffff">
     <title>Entries</title>
-    <script type="module" crossorigin src="/Entries/assets/index-K2OsNh4d.js"></script>
+    <script type="module" crossorigin src="/Entries/assets/index-BTa3JV3h.js"></script>
     <link rel="stylesheet" crossorigin href="/Entries/assets/index-Cb0nz5R2.css">
-  </head>
+  <link rel="manifest" href="/Entries/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/Entries/registerSW.js"></script></head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <base href="/" />
   </body>
 </html>
+<script>
+  if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/Entries/sw.js', {scope: '/Entries/'}, {type: 'module'}).then(registration => {
+      console.log('ServiceWorker registered: ', registration);
+    }).catch(error => {
+      console.log('ServiceWorker registration failed: ', error);
+    });
+  });
+}
+</script>
