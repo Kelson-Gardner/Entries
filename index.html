@@ -7,6 +7,7 @@
     <link rel="icon" href="src/assets/favicon.ico" />
     <link rel="apple-touch-icon" href="/src/assets/apple-touch-icon-180x180.png" sizes="180x180" />
     <link rel="mask-icon" href="src/assets/mask-icon.svg" color="#FFFFFF">
+    <link rel="canonical" href="https://kelson-gardner.github.io/Entries/" />
     <meta name="theme-color" content="#ffffff">
     <title>Entries</title>
   </head>
@@ -18,7 +19,7 @@
 <script>
   if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js', {scope: '/'}, {type: 'module'}).then(registration => {
+    navigator.serviceWorker.register('/Entries/public/sw.js', {scope: '/Entries/'}, {type: 'module'}).then(registration => {
       console.log('ServiceWorker registered: ', registration);
     }).catch(error => {
       console.log('ServiceWorker registration failed: ', error);
