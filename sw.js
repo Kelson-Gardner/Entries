@@ -1,6 +1,6 @@
-import { precacheAndRoute } from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate } from 'workbox-strategies';
+// import { precacheAndRoute } from 'workbox-precaching';
+// import { registerRoute } from 'workbox-routing';
+// import { StaleWhileRevalidate } from 'workbox-strategies';
 
 var APP_PREFIX = 'Entries'     // Identifier for this app (this needs to be consistent across every cache update)
 var VERSION = 'version_01'              // Version of the off-line cache (change this value everytime you want to update cache)
@@ -10,12 +10,12 @@ var URLS = [                            // Add URL you want to cache in this lis
   '/Entries/index.html'            // add path to those files here
 ]
 
-precacheAndRoute(self.__WB_MANIFEST || []);
+// precacheAndRoute(self.__WB_MANIFEST || []);
 
-registerRoute(
-  ({ url }) => url.origin === 'https://kelson-gardner.github.io/Entries/',
-  new StaleWhileRevalidate()
-);
+// registerRoute(
+//   ({ url }) => url.origin === 'https://kelson-gardner.github.io/Entries/',
+//   new StaleWhileRevalidate()
+// );
 
 self.addEventListener('fetch', function (e) {
   console.log('fetch request : ' + e.request.url)
