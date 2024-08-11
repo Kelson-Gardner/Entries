@@ -9,7 +9,9 @@
     "build": "vite build",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal public/app-icon.svg",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
