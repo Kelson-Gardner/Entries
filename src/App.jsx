@@ -108,6 +108,12 @@ function App() {
         }
 
         entries.push(entry);
+      } else {
+        if(values.length > headers.length){
+          setFormatError(`There are too many columns! There are ${values.length} columns instead of 2.`)
+          setError("The CSV is not formatted correctly!")
+          return []
+        }
       }
     }
     return entries;
