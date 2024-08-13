@@ -15,7 +15,7 @@ export default defineConfig({
       manifest: {
         name: 'Entries Winner',
         short_name: 'Entries',
-        start_url: '/',
+        start_url: '/Entries/',
         display: 'standalone',
         theme_color: '#ffffff',
         background_color: '#ffffff',
